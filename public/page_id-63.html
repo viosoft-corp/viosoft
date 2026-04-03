@@ -583,10 +583,10 @@ var wpcf7 = {"api":{"root":"https:\/\/www.viosoft.com\/index.php?rest_route=\/",
         if (btn.tagName === "INPUT") btn.value = "Sending…";
         else btn.textContent = "Sending…";
       }
-      var siteUrl = "viosoft-corp.github.io/viosoft";
+      var siteUrl = window.location.hostname + (window.location.pathname.length > 1 ? window.location.pathname.replace(/\/[^\/]+$/, "") : "");
       var commenterSite = fv(cf, "url");
       var commentBody = fv(cf, "comment");
-      var siteUrl = "viosoft-corp.github.io/viosoft";
+      var siteUrl = window.location.hostname + (window.location.pathname.length > 1 ? window.location.pathname.replace(/\/[^\/]+$/, "") : "");
       var commenterSite = fv(cf, "url");
       var commentBody = fv(cf, "comment");
       var fullMessage = (commenterSite ? "Website: " + commenterSite + "\n" : "")
