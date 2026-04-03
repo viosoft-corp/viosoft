@@ -1,0 +1,513 @@
+<!DOCTYPE html><html lang="en-US" itemscope="" itemtype="http://schema.org/WebPage" class=" js_active  vc_desktop  vc_transform  vc_transform "><head>
+<!-- Viosoft static-clone shim patch -->
+<style>.tp-loader,.tp-bannertimer{display:none!important}</style>
+<script>
+(function(){
+  /* Stub ajaxurl so WP plugins don't call viosoft.com/wp-admin */
+  if(typeof ajaxurl!=="undefined")
+    window._origAjaxurl=ajaxurl;
+  window.ajaxurl="/dev/null";
+
+  /* Stub CF7 wpcf7 settings root URL */
+  if(window.wpcf7){wpcf7.apiSettings={root:"",namespace:"",nonce:""};}
+  document.addEventListener("DOMContentLoaded",function(){
+    if(window.wpcf7){wpcf7.apiSettings={root:"",namespace:"",nonce:""};
+      if(wpcf7.support)wpcf7.support.recaptcha=false;}
+  });
+
+  /* Intercept fetch() calls to viosoft.com WP endpoints — return neutral stub */
+  var _origFetch=window.fetch;
+  window.fetch=function(url,opts){
+    var s=typeof url==="string"?url:(url&&url.url)||"";
+    if(s.indexOf("viosoft.com")!==-1||s.indexOf("admin-ajax")!==-1||
+       s.indexOf("wp-json")!==-1||s.indexOf("wpcf7")!==-1){
+      return Promise.resolve(new Response(
+        JSON.stringify({code:"static_clone",message:"REST API unavailable on static clone"}),
+        {status:200,headers:{"Content-Type":"application/json"}}
+      ));
+    }
+    return _origFetch.apply(this,arguments);
+  };
+
+  /* Intercept XMLHttpRequest to ajaxurl/wp-admin so it returns empty success */
+  var _XHROpen=XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open=function(m,url){
+    if(typeof url==="string"&&(url.indexOf("viosoft.com")!==-1||
+       url.indexOf("admin-ajax")!==-1||url.indexOf("wp-json")!==-1)){
+      this._stubbed=true;
+    }
+    return _XHROpen.apply(this,arguments);
+  };
+  var _XHRSend=XMLHttpRequest.prototype.send;
+  XMLHttpRequest.prototype.send=function(body){
+    if(this._stubbed){
+      var self=this;
+      setTimeout(function(){
+        Object.defineProperty(self,"status",{get:function(){return 200;}});
+        Object.defineProperty(self,"responseText",{get:function(){return "{}"}});
+        Object.defineProperty(self,"response",{get:function(){return "{}"}});
+        if(self.onreadystatechange){
+          Object.defineProperty(self,"readyState",{get:function(){return 4;}});
+          self.onreadystatechange();
+        }
+        if(self.onload)self.onload();
+      },0);
+      return;
+    }
+    return _XHRSend.apply(this,arguments);
+  };
+})();
+</script>
+<script>/* __WP_STATIC_SHIM__ */
+(function(){
+  /* Stub wp-json REST API so 404s don't spam the console */
+  var _fetch = window.fetch;
+  window.fetch = function(input, init) {
+    var url = typeof input === 'string' ? input : (input && input.url) || '';
+    if (url.indexOf('/wp-json/') !== -1 ||
+        url.indexOf('/wp-admin/admin-ajax.php') !== -1 ||
+        url.indexOf('/cdn-cgi/rum') !== -1 ||
+        url.indexOf('cloudflareinsights.com') !== -1) {
+      return Promise.resolve(new Response('', {status:204}));
+    }
+    return _fetch.apply(this, arguments);
+  };
+
+  /* Stub WP Heartbeat API */
+  window.wp = window.wp || {};
+  window.wp.heartbeat = window.wp.heartbeat || {
+    interval: function(){}, connect: function(){}, enqueue: function(){},
+    dequeue: function(){}, isActive: function(){return false;}
+  };
+
+  /* Block wp-admin redirects from broken nonces */
+  window.ajaxurl = window.ajaxurl || '';
+  window.wpApiSettings = window.wpApiSettings || {root:'', nonce:''};
+
+  /* Stub navigator.sendBeacon so Cloudflare RUM never POSTs to /cdn-cgi/rum */
+  if (navigator.sendBeacon) {
+    var _beacon = navigator.sendBeacon.bind(navigator);
+    navigator.sendBeacon = function(url, data) {
+      if (url && (url.indexOf('/cdn-cgi/') !== -1 ||
+                  url.indexOf('cloudflare') !== -1 ||
+                  url.indexOf('rum') !== -1)) {
+        return true;  // silently discard
+      }
+      return _beacon(url, data);
+    };
+  }
+})();
+</script>
+
+<meta charset="UTF-8">
+<link rel="profile" href="https://gmpg.org/xfn/11">
+<title>VIOSOFT</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="Total WordPress Theme 4.4.1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link rel="dns-prefetch" href="//s.w.org">
+<link rel="alternate" type="application/rss+xml" title="VIOSOFT » Feed" href="index.html">
+<link rel="alternate" type="application/rss+xml" title="VIOSOFT » Comments Feed" href="/?feed=comments-rss2">
+<link rel="stylesheet" id="js_composer_front-css" href="assets/www.viosoft.com/wp-content/plugins/js_composer/assets/css/js_composer.min_de546528.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-block-library-css" href="assets/www.viosoft.com/wp-includes/css/dist/block-library/style.min_24b2172d.css" type="text/css" media="all">
+<link rel="stylesheet" id="rs-plugin-settings-css" href="assets/www.viosoft.com/wp-content/plugins/revslider/public/assets/css/settings_035fc11f.css" type="text/css" media="all">
+<style id="rs-plugin-settings-inline-css" type="text/css">
+#rs-demo-id {}
+.tp-caption.large_bold_white,.large_bold_white{font-size:58px;line-height:60px;font-weight:800;font-family:"Open Sans";color:rgb(255,255,255);text-decoration:none;background-color:transparent;border-width:0px;border-color:rgb(255,214,88);border-style:none}.tp-caption.medium_light_white,.medium_light_white{font-size:30px;line-height:36px;font-weight:300;font-family:"Open Sans";color:rgb(255,255,255);text-decoration:none;background-color:transparent;border-width:0px;border-color:rgb(255,214,88);border-style:none}	#rev_slider_2_1_wrapper .tp-loader.spinner3 div { background-color: #FFFFFF !important; } </style>
+<link rel="stylesheet" id="wpex-style-css" href="assets/www.viosoft.com/wp-content/themes/Total/style_a94ece27.css" type="text/css" media="all">
+<link rel="stylesheet" id="wpex-google-font-open-sans-css" href="//fonts.googleapis.com/css?family=Open+Sans%3A100%2C200%2C300%2C400%2C500%2C600%2C700%2C800%2C900%2C100i%2C200i%2C300i%2C400i%2C500i%2C600i%2C700i%2C800i%2C900i&amp;subset=latin&amp;ver=5.5.5" type="text/css" media="all">
+<link rel="stylesheet" id="wpex-google-font-lato-css" href="//fonts.googleapis.com/css?family=Lato%3A100%2C200%2C300%2C400%2C500%2C600%2C700%2C800%2C900%2C100i%2C200i%2C300i%2C400i%2C500i%2C600i%2C700i%2C800i%2C900i&amp;subset=latin&amp;ver=5.5.5" type="text/css" media="all">
+<link rel="stylesheet" id="wpex-visual-composer-css" href="assets/www.viosoft.com/wp-content/themes/Total/assets/css/wpex-visual-composer_a94ece27.css" type="text/css" media="all">
+<link rel="stylesheet" id="wpex-visual-composer-extend-css" href="assets/www.viosoft.com/wp-content/themes/Total/assets/css/wpex-visual-composer-extend_a94ece27.css" type="text/css" media="all">
+<!--[if IE 8]>
+<link rel='stylesheet' id='wpex-ie8-css'  href='/wp-content/themes/Total/assets/css/wpex-ie8.css?ver=4.4.1' type='text/css' media='all' />
+<![endif]-->
+<!--[if IE 9]>
+<link rel='stylesheet' id='wpex-ie9-css'  href='/wp-content/themes/Total/assets/css/wpex-ie9.css?ver=4.4.1' type='text/css' media='all' />
+<![endif]-->
+<link rel="stylesheet" id="wpex-responsive-css" href="assets/www.viosoft.com/wp-content/themes/Total/assets/css/wpex-responsive_a94ece27.css" type="text/css" media="all">
+<script type="text/javascript" src="assets/www.viosoft.com/wp-includes/js/jquery/jquery_4a5f6b9f.js" id="jquery-core-js"></script>
+<script type="text/javascript" src="assets/www.viosoft.com/wp-content/plugins/revslider/public/assets/js/jquery.themepunch.tools.min_035fc11f.js" id="tp-tools-js"></script>
+<script type="text/javascript" src="assets/www.viosoft.com/wp-content/plugins/revslider/public/assets/js/jquery.themepunch.revolution.min_035fc11f.js" id="revmin-js"></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='/wp-content/themes/Total/assets/js/dynamic/html5.js?ver=4.4.1' id='wpex-html5shiv-js'></script>
+<![endif]-->
+<link rel="https://api.w.org/" href="/index.php?rest_route=/"><link rel="alternate" type="application/json" href="/index.php?rest_route=/wp/v2/pages/43"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="/wp-includes/wlwmanifest.xml"> 
+<meta name="generator" content="WordPress 5.5.5">
+
+<link rel="shortlink" href="index.html">
+<link rel="alternate" type="application/json+oembed" href="/index.php?rest_route=%2Foembed%2F1.0%2Fembed&amp;url=https%3A%2F%2Fwww.viosoft.com%2F">
+<link rel="alternate" type="text/xml+oembed" href="/index.php?rest_route=%2Foembed%2F1.0%2Fembed&amp;url=https%3A%2F%2Fwww.viosoft.com%2F&amp;format=xml">
+<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style><meta name="generator" content="Powered by WPBakery Page Builder - drag and drop page builder for WordPress.">
+<!--[if lte IE 9]><link rel="stylesheet" type="text/css" href="/wp-content/plugins/js_composer/assets/css/vc_lte_ie9.min.css" media="screen"><![endif]--><noscript><style type="text/css">body .wpex-vc-row-stretched, body .vc_row-o-full-height { visibility: visible; }</style></noscript><script type="text/javascript">function setREVStartSize(e){
+				try{ var i=jQuery(window).width(),t=9999,r=0,n=0,l=0,f=0,s=0,h=0;					
+					if(e.responsiveLevels&&(jQuery.each(e.responsiveLevels,function(e,f){f>i&&(t=r=f,l=e),i>f&&f>r&&(r=f,n=e)}),t>r&&(l=n)),f=e.gridheight[l]||e.gridheight[0]||e.gridheight,s=e.gridwidth[l]||e.gridwidth[0]||e.gridwidth,h=i/s,h=h>1?1:h,f=Math.round(h*f),"fullscreen"==e.sliderLayout){var u=(e.c.width(),jQuery(window).height());if(void 0!=e.fullScreenOffsetContainer){var c=e.fullScreenOffsetContainer.split(",");if (c) jQuery.each(c,function(e,i){u=jQuery(i).length>0?u-jQuery(i).outerHeight(!0):u}),e.fullScreenOffset.split("%").length>1&&void 0!=e.fullScreenOffset&&e.fullScreenOffset.length>0?u-=jQuery(window).height()*parseInt(e.fullScreenOffset,0)/100:void 0!=e.fullScreenOffset&&e.fullScreenOffset.length>0&&(u-=parseInt(e.fullScreenOffset,0))}f=u}else void 0!=e.minHeight&&f<e.minHeight&&(f=e.minHeight);e.c.closest(".rev_slider_wrapper").css({height:f})					
+				}catch(d){console.log("Failure at Presize of Slider:"+d)}
+			};</script>
+		<style type="text/css" id="wp-custom-css">
+			/* DEMO CSS >Add background to centered minimal page header */.page-header.centered-minimal-page-header{background:#f7f7f7}/* DEMO CSS >Hide Social Icons From Mobile Menu */#sidr-id-menu-item-103,#sidr-id-menu-item-104,#sidr-id-menu-item-105{display:none}		</style>
+		<style type="text/css" data-type="vc_shortcodes-custom-css">.vc_custom_1489892222319{padding-top: 20px !important;padding-bottom: 20px !important;}.vc_custom_1512542918487{background-position: center !important;background-repeat: no-repeat !important;background-size: cover !important;}.vc_custom_1512583915668{background-image: url(assets/www.viosoft.com/wp-content/uploads/2015/01/multi-clouds_c84ecb89.png) !important;background-position: center !important;background-repeat: no-repeat !important;background-size: cover !important;}.vc_custom_1489787065719{margin-bottom: 20px !important;}.vc_custom_1512603035045{background-color: #f5f5f5 !important;}.vc_custom_1512533453334{padding-top: 20px !important;padding-right: 0px !important;padding-bottom: 0px !important;padding-left: 0px !important;}</style><noscript><style type="text/css"> .wpb_animate_when_almost_visible { opacity: 1; }</style></noscript><style type="text/css" data-type="wpex-css" id="wpex-css">/*TYPOGRAPHY*/body{font-family:"Open Sans";font-size:16px;color:#111111;line-height:1.6}#site-navigation .dropdown-menu a{font-weight:600;font-size:16px}h1,h2,h3,h4,h5,h6,.theme-heading,.page-header-title,.heading-typography,.widget-title,.wpex-widget-recent-posts-title,.comment-reply-title,.vcex-heading,.entry-title,.sidebar-box .widget-title,.search-entry h2{font-family:"Lato";font-weight:600}/*CUSTOMIZER STYLING*/@media only screen and (min-width:960px){.content-area{width:70%}}@media only screen and (min-width:960px){.content-area{max-width:70%}}@media only screen and (min-width:960px){#sidebar{width:25%}}@media only screen and (min-width:960px){#sidebar{max-width:25%}}.page-header.wpex-supports-mods{padding-top:20px;padding-bottom:20px;border-top-color:#eeeeee;border-bottom-color:#eeeeee}#site-scroll-top{border-radius:4px;color:#ffffff;background-color:#444444;border-color:#444444}#site-scroll-top:hover{background-color:#c5a47e;border-color:#c5a47e}a,h1 a:hover,h2 a:hover,h3 a:hover,h4 a:hover,h5 a:hover,h6 a:hover,.entry-title a:hover,.woocommerce .woocommerce-error a.button,.woocommerce .woocommerce-info a.button,.woocommerce .woocommerce-message a.button{color:#c5a47e}.theme-button,input[type="submit"],button,#site-navigation .menu-button >a >span.link-inner{color:#ffffff;background:#c5a47e}.theme-button:hover,input[type="submit"]:hover,button:hover,#site-navigation .menu-button >a:hover >span.link-inner{background:#444444}.full-width-main-layout .container,.full-width-main-layout .vc_row-fluid.container,.boxed-main-layout #wrap{width:1100px}#site-navigation .dropdown-menu >li >a{color:#444444}#site-navigation .dropdown-menu >li >a:hover,#site-navigation .dropdown-menu >li.sfHover >a{color:#999999}#site-navigation .dropdown-menu >.current-menu-item >a,#site-navigation .dropdown-menu >.current-menu-parent >a,#site-navigation .dropdown-menu >.current-menu-item >a:hover,#site-navigation .dropdown-menu >.current-menu-parent >a:hover{color:#c5a47e!important}#site-header #site-navigation .dropdown-menu ul >li >a:hover{color:#c5a47e}#footer a{color:#666666}#footer a:hover{color:#000000}#footer-bottom{background:#333333;color:#999999}#footer-bottom p{color:#999999}#footer-bottom a{color:#c5a47e}#footer-bottom a:hover{color:#ffffff}.vc_column-inner{margin-bottom:40px}.vcex-filter-links a.theme-button.minimal-border:hover{color:#ffffff;background-color:#c5a47e;border-color:#c5a47e}.vcex-filter-links li.active a.theme-button.minimal-border{color:#ffffff;background-color:#c5a47e;border-color:#c5a47e}</style><style class="wpex-hover-data">/** CUSTOM HOVERS **/.wpex-data-hover-0:hover{background:#c5a47e!important;}</style></head>
+
+<!-- Begin Body -->
+<body data-rsssl="1" class="home page-template-default page page-id-43 wpex-theme wpex-responsive full-width-main-layout has-composer wpex-live-site content-full-width has-breadcrumbs sidebar-widget-icons hasnt-overlay-header footer-has-reveal page-header-disabled wpex-mobile-toggle-menu-icon_buttons has-mobile-menu wpb-js-composer js-comp-ver-5.3 vc_responsive wpex-docready wpex-window-loaded">
+
+
+<a href="#content" class="skip-to-content local-scroll-link" data-ls_linkto="#content">skip to Main Content</a><span data-ls_id="#site_top"></span>
+<div id="outer-wrap" class="clr">
+
+	
+	<div id="wrap" class="clr" style="margin-bottom: 64px;">
+
+		
+
+<header id="site-header" class="header-one dyn-styles clr" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+
+	
+	<div id="site-header-inner" class="container clr">
+
+		
+<div id="site-logo" class="site-branding clr header-one-logo">
+	<div id="site-logo-inner" class="clr">
+					<a href="index.html" title="VIOSOFT" rel="home" class="site-logo-text">VIOSOFT</a>
+					</div><!-- #site-logo-inner -->
+</div><!-- #site-logo -->
+	
+	<div id="site-navigation-wrap" class="navbar-style-one wpex-dropdowns-caret clr">
+
+		<nav id="site-navigation" class="navigation main-navigation clr" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+
+			
+				<ul id="menu-main" class="dropdown-menu sf-menu sf-js-enabled" style="touch-action: pan-y;"><li id="menu-item-128" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-43 current_page_item menu-item-128"><a href="index.html" aria-current="page"><span class="link-inner">Home</span></a></li>
+<li id="menu-item-117" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-117"><a href="page_id-40.html"><span class="link-inner">Portfolio</span></a></li>
+<li id="menu-item-119" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-119"><a href="page_id-62.html"><span class="link-inner">Services</span></a></li>
+<li id="menu-item-118" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-118"><a href="page_id-63.html"><span class="link-inner">Contact</span></a></li>
+<li class="search-toggle-li wpex-menu-extra"><a href="#" class="site-search-toggle search-header-replace-toggle"><span class="link-inner"><span class="wpex-menu-search-text">Search</span><span class="fa fa-search" aria-hidden="true"></span></span></a></li></ul>
+			
+		</nav><!-- #site-navigation -->
+
+	</div><!-- #site-navigation-wrap -->
+
+	
+
+<div id="mobile-menu" class="clr wpex-mobile-menu-toggle wpex-hidden"><a href="#" class="mobile-menu-toggle"><span class="fa fa-navicon" aria-hidden="true"></span><span class="screen-reader-text">Open Mobile Menu</span></a></div><!-- #mobile-menu -->
+<div id="searchform-header-replace" class="clr header-searchform-wrap">
+	<form method="get" action="index.html" class="header-searchform">
+		<input type="search" name="s" autocomplete="off" placeholder="Type then hit enter to search...">
+			</form>
+	<span id="searchform-header-replace-close" class="fa fa-times"></span>
+</div><!-- #searchform-header-replace -->
+	</div><!-- #site-header-inner -->
+
+	
+</header><!-- #header -->
+
+
+		
+		<main id="main" class="site-main clr">
+
+			
+	<div id="content-wrap" class="container clr">
+
+		
+		<div id="primary" class="content-area clr">
+
+			
+			<div id="content" class="site-content clr">
+
+				
+				
+					
+<article id="single-blocks" class="single-page-article wpex-clr">
+
+	
+<div class="single-page-content entry clr"><div data-vc-full-width="true" data-vc-full-width-init="true" data-vc-stretch-content="true" class="vc_row wpb_row vc_row-fluid vc_row-no-padding wpex-vc-row-stretched" style="position: relative; left: -155px; box-sizing: border-box; width: 1440px;"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner "><div class="wpb_wrapper"><div class="wpb_revslider_element wpb_content_element"><link href="assets/fonts.googleapis.com/css_66ef5750.css" rel="stylesheet" property="stylesheet" type="text/css" media="all">
+<div id="rev_slider_2_1_wrapper" class="rev_slider_wrapper fullwidthbanner-container" data-source="gallery" style="margin: 0px auto; background: rgb(233, 233, 233); padding: 0px; height: 600px; overflow: visible;">
+<!-- START REVOLUTION SLIDER 5.4.6.2 auto mode -->
+	<div id="rev_slider_2_1" class="rev_slider fullwidthabanner revslider-initialised tp-simpleresponsive rev_redraw_on_blurfocus" style="margin-top: 0px; margin-bottom: 0px; height: 600px;" data-version="5.4.6.2" data-slideactive="rs-5">
+<ul class="tp-revslider-mainul" style="visibility: visible; display: block; overflow: hidden; width: 1440px; height: 100%; max-height: none; left: 0px;">	<!-- SLIDE  -->
+	<li data-index="rs-5" data-transition="fade" data-slotamount="7" data-hideafterloop="0" data-hideslideonmobile="off" data-easein="default" data-easeout="default" data-masterspeed="300" data-rotate="0" data-saveperformance="off" data-mediafilter="reyes" data-title="Slide" data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="" class="tp-revslider-slidesli active-revslide" style="width: 100%; height: 100%; overflow: hidden; z-index: 20; visibility: inherit; opacity: 1; background-color: rgba(255, 255, 255, 0);">
+		<!-- MAIN IMAGE -->
+		<div class="slotholder" style="position: absolute; top: 0px; left: 0px; z-index: 0; width: 100%; height: 100%; visibility: inherit; opacity: 1; transform: matrix(1, 0, 0, 1, 0, 0);"><!--Runtime Modification - Img tag is Still Available for SEO Goals in Source - <img src="assets/www.viosoft.com/wp-content/uploads/2015/01/Digital-Platforms-and-Ecosystems.jpg" alt="" title="Digital-Platforms-and-Ecosystems" width="1838" height="1034" data-bgposition="center top" data-bgfit="cover" data-bgrepeat="no-repeat" class="rev-slidebg defaultimg" data-no-retina="">--><div class="tp-bgimg defaultimg reyes" data-bgcolor="undefined" style="background-repeat: no-repeat; background-image: url(assets/www.viosoft.com/wp-content/uploads/2015/01/Digital-Platforms-and-Ecosystems.jpg); background-size: cover; background-position: center top; width: 100%; height: 100%; opacity: 1; visibility: inherit; z-index: 20;" src="assets/www.viosoft.com/wp-content/uploads/2015/01/Digital-Platforms-and-Ecosystems.jpg"></div></div>
+		<!-- LAYERS -->
+
+		<!-- LAYER NR. 1 -->
+		<div class="tp-parallax-wrap" style="position: absolute; display: block; visibility: visible; left: 269px; top: 300px; z-index: 5;"><div class="tp-loop-wrap" style="position:absolute;display:block;;"><div class="tp-mask-wrap" style="position: absolute; display: block; overflow: visible;"><div class="tp-caption large_bold_white   tp-resizeme" id="slide-5-layer-1" data-x="center" data-hoffset="" data-y="center" data-voffset="30" data-width="['auto']" data-height="['auto']" data-type="text" data-responsive_offset="on" data-frames="[{&quot;delay&quot;:500,&quot;speed&quot;:1200,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;opacity:0;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:300,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;auto:auto;&quot;,&quot;ease&quot;:&quot;nothing&quot;}]" data-textalign="['inherit','inherit','inherit','inherit']" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 5; white-space: nowrap; color: rgb(255, 255, 255); background-color: rgba(0, 0, 0, 0); visibility: inherit; transition: none; text-align: inherit; line-height: 60px; border-width: 0px; margin: 0px; padding: 0px; letter-spacing: 0px; font-weight: 800; font-size: 58px; min-height: 0px; min-width: 0px; max-height: none; max-width: none; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform-origin: 50% 50% 0px;">Driving digital transformation </div></div></div></div>
+
+		<!-- LAYER NR. 2 -->
+		<div class="tp-parallax-wrap" style="position: absolute; display: block; visibility: visible; left: 471px; top: 394px; z-index: 6;"><div class="tp-loop-wrap" style="position:absolute;display:block;;"><div class="tp-mask-wrap" style="position: absolute; display: block; overflow: visible;"><div class="tp-caption medium_light_white   tp-resizeme" id="slide-5-layer-2" data-x="center" data-hoffset="" data-y="394" data-width="['auto']" data-height="['auto']" data-type="text" data-responsive_offset="on" data-frames="[{&quot;delay&quot;:1500,&quot;speed&quot;:1000,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;y:-50px;opacity:0;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:300,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;auto:auto;&quot;,&quot;ease&quot;:&quot;nothing&quot;}]" data-textalign="['inherit','inherit','inherit','inherit']" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 6; white-space: nowrap; font-weight: 500; color: rgb(255, 255, 255); visibility: inherit; transition: none; text-align: inherit; line-height: 36px; border-width: 0px; margin: 0px; padding: 0px; letter-spacing: 0px; font-size: 30px; min-height: 0px; min-width: 0px; max-height: none; max-width: none; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform-origin: 50% 50% 0px;">From edge devices to core network </div></div></div></div>
+
+		<!-- LAYER NR. 3 -->
+		<div class="tp-parallax-wrap" style="position: absolute; display: block; visibility: visible; left: 627px; top: 464px; z-index: 7;"><div class="tp-loop-wrap" style="position:absolute;display:block;;"><div class="tp-mask-wrap" style="position: absolute; display: block; overflow: visible;"><div class="tp-caption medium_light_white   tp-resizeme" id="slide-5-layer-3" data-x="center" data-hoffset="" data-y="center" data-voffset="182" data-width="['auto']" data-height="['auto']" data-type="text" data-responsive_offset="on" data-frames="[{&quot;delay&quot;:3000,&quot;speed&quot;:1000,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;y:-50px;opacity:0;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:300,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;auto:auto;&quot;,&quot;ease&quot;:&quot;nothing&quot;}]" data-textalign="['inherit','inherit','inherit','inherit']" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 7; white-space: nowrap; font-weight: 500; color: rgb(255, 255, 255); visibility: inherit; transition: none; text-align: inherit; line-height: 36px; border-width: 0px; margin: 0px; padding: 0px; letter-spacing: 0px; font-size: 30px; min-height: 0px; min-width: 0px; max-height: none; max-width: none; opacity: 1; transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); transform-origin: 50% 50% 0px;">and between </div></div></div></div>
+	</li>
+</ul>
+<div class="tp-bannertimer" style="height: 5px; background: rgba(0, 0, 0, 0.15); width: 0%;"></div>	<div class="tp-loader spinner3" style="display: none;"><div class="dot1"></div><div class="dot2"></div><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></div>
+<script>var htmlDiv = document.getElementById("rs-plugin-settings-inline-css"); var htmlDivCss=".tp-caption.large_bold_white,.large_bold_white{font-size:58px;line-height:60px;font-weight:800;font-family:\"Open Sans\";color:rgb(255,255,255);text-decoration:none;background-color:transparent;border-width:0px;border-color:rgb(255,214,88);border-style:none}.tp-caption.medium_light_white,.medium_light_white{font-size:30px;line-height:36px;font-weight:300;font-family:\"Open Sans\";color:rgb(255,255,255);text-decoration:none;background-color:transparent;border-width:0px;border-color:rgb(255,214,88);border-style:none}";
+				if(htmlDiv) {
+					htmlDiv.innerHTML = htmlDiv.innerHTML + htmlDivCss;
+				}else{
+					var htmlDiv = document.createElement("div");
+					htmlDiv.innerHTML = "<style>" + htmlDivCss + "</style>";
+					document.getElementsByTagName("head")[0].appendChild(htmlDiv.childNodes[0]);
+				}
+			</script>
+		<script type="text/javascript">
+setREVStartSize({c: jQuery('#rev_slider_2_1'), gridwidth: [960], gridheight: [600], sliderLayout: 'auto'});
+			
+var revapi2,
+	tpj=jQuery;
+tpj.noConflict();			
+tpj(document).ready(function() {
+	if(tpj("#rev_slider_2_1").revolution == undefined){
+		revslider_showDoubleJqueryError("#rev_slider_2_1");
+	}else{
+		revapi2 = tpj("#rev_slider_2_1").show().revolution({
+			sliderType:"standard",
+			jsFileLocation:"//www.viosoft.com/wp-content/plugins/revslider/public/assets/js/",
+			sliderLayout:"auto",
+			dottedOverlay:"none",
+			delay:9000,
+			navigation: {
+				keyboardNavigation:"off",
+				keyboard_direction: "horizontal",
+				mouseScrollNavigation:"off",
+ 							mouseScrollReverse:"default",
+				onHoverStop:"on",
+				touch:{
+					touchenabled:"on",
+					touchOnDesktop:"off",
+					swipe_threshold: 0.7,
+					swipe_min_touches: 1,
+					swipe_direction: "horizontal",
+					drag_block_vertical: false
+				}
+			},
+			visibilityLevels:[1240,1024,778,480],
+			gridwidth:960,
+			gridheight:600,
+			lazyType:"none",
+			shadow:0,
+			spinner:"spinner3",
+			stopLoop:"off",
+			stopAfterLoops:-1,
+			stopAtSlide:-1,
+			shuffle:"off",
+			autoHeight:"off",
+			hideThumbsOnMobile:"off",
+			hideSliderAtLimit:0,
+			hideCaptionAtLimit:0,
+			hideAllCaptionAtLilmit:0,
+			debugMode:false,
+			fallbacks: {
+				simplifyAll:"off",
+				nextSlideOnWindowFocus:"off",
+				disableFocusListener:false,
+			}
+		});
+	}
+	
+});	/*ready*/
+</script>
+		<script>
+					var htmlDivCss = '	#rev_slider_2_1_wrapper .tp-loader.spinner3 div { background-color: #FFFFFF !important; } ';
+					var htmlDiv = document.getElementById('rs-plugin-settings-inline-css');
+					if(htmlDiv) {
+						htmlDiv.innerHTML = htmlDiv.innerHTML + htmlDivCss;
+					}
+					else{
+						var htmlDiv = document.createElement('div');
+						htmlDiv.innerHTML = '<style>' + htmlDivCss + '</style>';
+						document.getElementsByTagName('head')[0].appendChild(htmlDiv.childNodes[0]);
+					}
+					</script>
+					</div><!-- END REVOLUTION SLIDER --></div></div></div></div></div><div class="vc_row-full-width vc_clearfix"></div><div class="vc_row wpb_row vc_row-fluid vc_custom_1489892222319"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner "><div class="wpb_wrapper">
+	<div style="width:700px;" class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<p style="text-align: center;">We deliver products and services to help customers build and operate unified, end-to-end digital infrastructure to collect, analyze, and deliver insight from real-time data in order to increase efficiency, &nbsp;streamline automation, and accelerate business innovation.</p>
+
+		</div>
+	</div>
+</div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner "><div class="wpb_wrapper"><div class="vcex-module vcex-icon-box clr vcex-icon-box-two textcenter"><div class="vcex-icon-box-icon" style="color:#c5a47e;font-size:32px;"><span class="vc_li vc_li-params"></span></div><h2 class="vcex-icon-box-heading" style="font-size:18px;">IoT &amp; Embedded</h2><div class="vcex-icon-box-content clr"><p style="text-align: left">Development and debug tools for embedded micro-controllers, embedded Linux, fixed &amp; mobile IoT, and telco-cloud. &nbsp;Reference designs for consumer multimedia, field data acquisition and analysis, and real-time device monitoring and reporting.</p>
+</div></div></div></div></div><div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner "><div class="wpb_wrapper"><div class="vcex-module vcex-icon-box clr vcex-icon-box-two textcenter"><div class="vcex-icon-box-icon" style="color:#c5a47e;font-size:32px;"><span class="vc_li vc_li-lab"></span></div><h2 class="vcex-icon-box-heading" style="font-size:18px;">Mobile Edge </h2><div class="vcex-icon-box-content clr"><p style="text-align: left">Hyper-connected, low-latency eNB with high UE density. &nbsp;Web-scale FlexRAN deployment with virtualized LTE network utilizing industry standard orchestration and automation framework. &nbsp;Micro network application services for different wireless backend.</p>
+</div></div></div></div></div><div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner "><div class="wpb_wrapper"><div class="vcex-module vcex-icon-box clr vcex-icon-box-two textcenter"><div class="vcex-icon-box-icon" style="color:#c5a47e;font-size:32px;"><span class="vc_li vc_li-user"></span></div><h2 class="vcex-icon-box-heading" style="font-size:18px;">Access Network</h2><div class="vcex-icon-box-content clr"><p style="text-align: left">Combine the pervasiveness of public network with the flexibility of software-defined networking to build private virtual mesh access network that meets or exceeds the performance and reliability standard set by traditional WAN deployment.</p>
+</div></div></div></div></div></div><div class="vc_row wpb_row vc_row-fluid"><div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner "><div class="wpb_wrapper"><div class="vcex-module vcex-icon-box clr vcex-icon-box-two textcenter"><div class="vcex-icon-box-icon" style="color:#c5a47e;font-size:32px;"><span class="vc_li vc_li-display"></span></div><h2 class="vcex-icon-box-heading" style="font-size:18px;">Core Network</h2><div class="vcex-icon-box-content clr"><p style="text-align: left">Chaining of network applications to deliver new and innovative services, while aggregating compute-intensive use cases in the core network to optimize OpEx and CapEx. Production ready reference core network services such as router, firewall, DPI, and IPS.</p>
+</div></div></div></div></div><div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner "><div class="wpb_wrapper"><div class="vcex-module vcex-icon-box clr vcex-icon-box-two textcenter"><div class="vcex-icon-box-icon" style="color:#c5a47e;font-size:32px;"><span class="vc_li vc_li-settings"></span></div><h2 class="vcex-icon-box-heading" style="font-size:18px;">Public &amp; Private Cloud</h2><div class="vcex-icon-box-content clr"><p style="text-align: left">Build, manage and operate private cloud with off-the-shelf unified end-to-end digital infrastructure (Kubernetes, OpenStack). Network slicing PoCs fast-tract deployment by reducing latency for critical applications while improving utilization of shared resources.</p>
+</div></div></div></div></div><div class="wpb_column vc_column_container vc_col-sm-4"><div class="vc_column-inner "><div class="wpb_wrapper"><div class="vcex-module vcex-icon-box clr vcex-icon-box-two textcenter"><div class="vcex-icon-box-icon" style="color:#c5a47e;font-size:32px;"><span class="vc_li vc_li-world"></span></div><h2 class="vcex-icon-box-heading" style="font-size:18px;">CI &amp; CD / DevOps</h2><div class="vcex-icon-box-content clr"><p style="text-align: left">Create and deploy agile network services on multi, hybrid clouds. &nbsp;Integration platform to develop, test, debug, and deploy virtualized applications and micro services in continuous cycle with cutting edge DevOps and network service modeling tools.</p>
+</div></div></div></div></div></div><div data-vc-full-width="true" data-vc-full-width-init="true" class="vc_row wpb_row vc_row-fluid bg-fixed vc_custom_1512542918487 wpex-vc_row-has-fill wpex-vc-row-stretched" style="position: relative; left: -155px; box-sizing: border-box; width: 1440px; padding-left: 155px; padding-right: 155px;"><div class="wpb_column vc_column_container vc_col-sm-12"><div style="margin-bottom: 0;" class="vc_column-inner "><div class="wpb_wrapper"><div class="vcex-spacing" style="height:30px"></div>
+	<div style="color:#000000;" class="wpb_text_column has-custom-color wpb_content_element  limit-text-width">
+		<div class="wpb_wrapper">
+			<p style="text-align: center;"><span style="font-size: 32px;">Unified native services, with open infrastructure, on many clouds</span></p>
+
+		</div>
+	</div>
+<div class="vc_separator wpb_content_element vc_separator_align_center vc_sep_width_100 vc_sep_pos_align_center vc_separator_no_text vc_sep_color_grey"><span class="vc_sep_holder vc_sep_holder_l"><span class="vc_sep_line"></span></span><span class="vc_sep_holder vc_sep_holder_r"><span class="vc_sep_line"></span></span>
+</div><div class="vcex-spacing" style="height:30px"></div></div></div></div></div><div class="vc_row-full-width vc_clearfix"></div><div data-vc-full-width="true" data-vc-full-width-init="true" class="vc_row wpb_row vc_row-fluid bg-fixed vc_custom_1512583915668 wpex-vc_row-has-fill wpex-vc-row-stretched" style="position: relative; left: -155px; box-sizing: border-box; width: 1440px; padding-left: 155px; padding-right: 155px;"><div class="wpb_column vc_column_container vc_col-sm-12"><div style="margin-bottom: 0;" class="vc_column-inner "><div class="wpb_wrapper"><div class="vcex-spacing" style="height:30px"></div><div class="wpex-carousel wpex-carousel-blog owl-carousel clr arrwstyle-circle arrwpos-center owl-loaded owl-drag" data-items="1" data-slideby="1" data-nav="true" data-dots="true" data-autoplay="true" data-loop="true" data-autoplay-timeout="5000" data-center="false" data-margin="15" data-items-tablet="1" data-items-mobile-landscape="1" data-items-mobile-portrait="1" data-smart-speed="1500"><div class="owl-stage-outer"><div class="owl-stage" style="transform: translate3d(-4460px, 0px, 0px); transition: 1.5s; width: 12265px;"><div class="owl-item cloned" style="width: 1100px; margin-right: 15px;"><div class="wpex-carousel-slide clr has-media"><div class="wpex-carousel-entry-media clr "><img width="2000" height="1125" src="assets/www.viosoft.com/wp-content/uploads/2017/12/sd-wan.png" class="attachment-full size-full" alt="Software-defined wide area network (SD-WAN)" loading="lazy"></div><div class="wpex-carousel-entry-details clr"><div class="wpex-carousel-entry-title entry-title" style="font-size:20px;"><a href="p-438.html" title="Software-defined wide area network (SD-WAN)">Software-defined wide area network (SD-WAN)</a></div><div class="wpex-carousel-entry-excerpt clr"><blockquote><p>Software-defined WAN solutions are highly appealing for their efficiency, flexibility, and security benefits. Our survey showed that although still emerging, software-defined WAN solutions are integral in shaping the future of WAN management.</p>
+<p><em>— Forester Analyst</em></p></blockquote>
+</div></div></div></div><div class="owl-item cloned" style="width: 1100px; margin-right: 15px;"><div class="wpex-carousel-slide clr has-media"><div class="wpex-carousel-entry-media clr "><img width="2000" height="1125" src="assets/www.viosoft.com/wp-content/uploads/2017/12/dronava.png" class="attachment-full size-full" alt="Virtualized mobile network" loading="lazy"></div><div class="wpex-carousel-entry-details clr"><div class="wpex-carousel-entry-title entry-title" style="font-size:20px;"><a href="p-412.html" title="Virtualized mobile network">Virtualized mobile network</a></div><div class="wpex-carousel-entry-excerpt clr"><blockquote><p>Cloud RAN is based on two tenets: centralization and virtualization of base station baseband processing</p>
+<p><em>— Frank Rayal</em></p></blockquote>
+</div></div></div></div><div class="owl-item cloned" style="width: 1100px; margin-right: 15px;"><div class="wpex-carousel-slide clr has-media"><div class="wpex-carousel-entry-media clr "><img width="2000" height="1125" src="assets/www.viosoft.com/wp-content/uploads/2017/12/cloud-federation.png" class="attachment-full size-full" alt="Orchestration and federation" loading="lazy"></div><div class="wpex-carousel-entry-details clr"><div class="wpex-carousel-entry-title entry-title" style="font-size:20px;"><a href="p-401.html" title="Orchestration and federation">Orchestration and federation</a></div><div class="wpex-carousel-entry-excerpt clr"><blockquote><p>I don’t need a hard disk in my computer if I can get to the server faster… carrying around these non-connected computers is byzantine by comparison.</p>
+<p><em>— Steve Jobs</em></p></blockquote>
+</div></div></div></div><div class="owl-item" style="width: 1100px; margin-right: 15px;"><div class="wpex-carousel-slide clr has-media"><div class="wpex-carousel-entry-media clr "><img width="2000" height="1125" src="assets/www.viosoft.com/wp-content/uploads/2017/12/test-validation.png" class="attachment-full size-full" alt="Validation and characterization of digital infrastructure" loading="lazy"></div><div class="wpex-carousel-entry-details clr"><div class="wpex-carousel-entry-title entry-title" style="font-size:20px;"><a href="p-453.html" title="Validation and characterization of digital infrastructure">Validation and characterization of digital infrastructure</a></div><div class="wpex-carousel-entry-excerpt clr"><blockquote><p>…we were talking a lot about what 5G will enable. All of that requires way more bandwidth, very low latency and a much better responsiveness at the endpoint near the device or the user</p>
+<p><em>— Sandra Rivera</em></p></blockquote>
+</div></div></div></div><div class="owl-item active" style="width: 1100px; margin-right: 15px;"><div class="wpex-carousel-slide clr has-media"><div class="wpex-carousel-entry-media clr "><img width="2000" height="1125" src="assets/www.viosoft.com/wp-content/uploads/2017/12/cloud-devops.png" class="attachment-full size-full" alt="Cloud-native modeling and DevOps" loading="lazy"></div><div class="wpex-carousel-entry-details clr"><div class="wpex-carousel-entry-title entry-title" style="font-size:20px;"><a href="p-444.html" title="Cloud-native modeling and DevOps">Cloud-native modeling and DevOps</a></div><div class="wpex-carousel-entry-excerpt clr"><blockquote><p>Currently, DevOps is more like a philosophical movement, not yet a precise collection of practices, descriptive or prescriptive</p>
+<p><em>— Gene Kim</em></p></blockquote>
+</div></div></div></div><div class="owl-item" style="width: 1100px; margin-right: 15px;"><div class="wpex-carousel-slide clr has-media"><div class="wpex-carousel-entry-media clr "><img width="2000" height="1125" src="assets/www.viosoft.com/wp-content/uploads/2017/12/sd-wan.png" class="attachment-full size-full" alt="Software-defined wide area network (SD-WAN)" loading="lazy"></div><div class="wpex-carousel-entry-details clr"><div class="wpex-carousel-entry-title entry-title" style="font-size:20px;"><a href="p-438.html" title="Software-defined wide area network (SD-WAN)">Software-defined wide area network (SD-WAN)</a></div><div class="wpex-carousel-entry-excerpt clr"><blockquote><p>Software-defined WAN solutions are highly appealing for their efficiency, flexibility, and security benefits. Our survey showed that although still emerging, software-defined WAN solutions are integral in shaping the future of WAN management.</p>
+<p><em>— Forester Analyst</em></p></blockquote>
+</div></div></div></div><div class="owl-item" style="width: 1100px; margin-right: 15px;"><div class="wpex-carousel-slide clr has-media"><div class="wpex-carousel-entry-media clr "><img width="2000" height="1125" src="assets/www.viosoft.com/wp-content/uploads/2017/12/dronava.png" class="attachment-full size-full" alt="Virtualized mobile network" loading="lazy"></div><div class="wpex-carousel-entry-details clr"><div class="wpex-carousel-entry-title entry-title" style="font-size:20px;"><a href="p-412.html" title="Virtualized mobile network">Virtualized mobile network</a></div><div class="wpex-carousel-entry-excerpt clr"><blockquote><p>Cloud RAN is based on two tenets: centralization and virtualization of base station baseband processing</p>
+<p><em>— Frank Rayal</em></p></blockquote>
+</div></div></div></div><div class="owl-item" style="width: 1100px; margin-right: 15px;"><div class="wpex-carousel-slide clr has-media"><div class="wpex-carousel-entry-media clr "><img width="2000" height="1125" src="assets/www.viosoft.com/wp-content/uploads/2017/12/cloud-federation.png" class="attachment-full size-full" alt="Orchestration and federation" loading="lazy"></div><div class="wpex-carousel-entry-details clr"><div class="wpex-carousel-entry-title entry-title" style="font-size:20px;"><a href="p-401.html" title="Orchestration and federation">Orchestration and federation</a></div><div class="wpex-carousel-entry-excerpt clr"><blockquote><p>I don’t need a hard disk in my computer if I can get to the server faster… carrying around these non-connected computers is byzantine by comparison.</p>
+<p><em>— Steve Jobs</em></p></blockquote>
+</div></div></div></div><div class="owl-item cloned" style="width: 1100px; margin-right: 15px;"><div class="wpex-carousel-slide clr has-media"><div class="wpex-carousel-entry-media clr "><img width="2000" height="1125" src="assets/www.viosoft.com/wp-content/uploads/2017/12/test-validation.png" class="attachment-full size-full" alt="Validation and characterization of digital infrastructure" loading="lazy"></div><div class="wpex-carousel-entry-details clr"><div class="wpex-carousel-entry-title entry-title" style="font-size:20px;"><a href="p-453.html" title="Validation and characterization of digital infrastructure">Validation and characterization of digital infrastructure</a></div><div class="wpex-carousel-entry-excerpt clr"><blockquote><p>…we were talking a lot about what 5G will enable. All of that requires way more bandwidth, very low latency and a much better responsiveness at the endpoint near the device or the user</p>
+<p><em>— Sandra Rivera</em></p></blockquote>
+</div></div></div></div><div class="owl-item cloned" style="width: 1100px; margin-right: 15px;"><div class="wpex-carousel-slide clr has-media"><div class="wpex-carousel-entry-media clr "><img width="2000" height="1125" src="assets/www.viosoft.com/wp-content/uploads/2017/12/cloud-devops.png" class="attachment-full size-full" alt="Cloud-native modeling and DevOps" loading="lazy"></div><div class="wpex-carousel-entry-details clr"><div class="wpex-carousel-entry-title entry-title" style="font-size:20px;"><a href="p-444.html" title="Cloud-native modeling and DevOps">Cloud-native modeling and DevOps</a></div><div class="wpex-carousel-entry-excerpt clr"><blockquote><p>Currently, DevOps is more like a philosophical movement, not yet a precise collection of practices, descriptive or prescriptive</p>
+<p><em>— Gene Kim</em></p></blockquote>
+</div></div></div></div><div class="owl-item cloned" style="width: 1100px; margin-right: 15px;"><div class="wpex-carousel-slide clr has-media"><div class="wpex-carousel-entry-media clr "><img width="2000" height="1125" src="assets/www.viosoft.com/wp-content/uploads/2017/12/sd-wan.png" class="attachment-full size-full" alt="Software-defined wide area network (SD-WAN)" loading="lazy"></div><div class="wpex-carousel-entry-details clr"><div class="wpex-carousel-entry-title entry-title" style="font-size:20px;"><a href="p-438.html" title="Software-defined wide area network (SD-WAN)">Software-defined wide area network (SD-WAN)</a></div><div class="wpex-carousel-entry-excerpt clr"><blockquote><p>Software-defined WAN solutions are highly appealing for their efficiency, flexibility, and security benefits. Our survey showed that although still emerging, software-defined WAN solutions are integral in shaping the future of WAN management.</p>
+<p><em>— Forester Analyst</em></p></blockquote>
+</div></div></div></div></div></div><div class="owl-nav"><div class="owl-prev"><span class="fa fa-chevron-left"><span></span></span></div><div class="owl-next"><span class="fa fa-chevron-right"></span></div></div><div class="owl-dots"><div class="owl-dot"><span></span></div><div class="owl-dot active"><span></span></div><div class="owl-dot"><span></span></div><div class="owl-dot"><span></span></div><div class="owl-dot"><span></span></div></div></div></div></div></div></div><div class="vc_row-full-width vc_clearfix"></div><div class="vc_row wpb_row vc_row-fluid vc_custom_1489787065719"><div class="wpb_column vc_column_container vc_col-sm-12"><div class="vc_column-inner "><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element  limit-text-width">
+		<div class="wpb_wrapper">
+			<p style="text-align: center;"><span style="font-size: 32px;">Enabling Mobile Edge Devices Innovation</span></p>
+
+		</div>
+	</div>
+<div class="vcex-spacing" style="height:40px"></div><div class="vcex-blog-grid-wrap wpex-clr"><div class="wpex-row vcex-blog-grid wpex-clr entries gap-30" data-transition-duration="0.0"><div class="vcex-blog-entry entry-has-details span_1_of_3 col-1 col post-192 entry type-post has-media cat-26"><div class="vcex-blog-entry-inner entry-inner wpex-clr"><div class="vcex-blog-entry-media entry-media wpex-image-hover opacity"><a href="p-192.html" title="Customer Premise Media Framework"><img src="assets/www.viosoft.com/wp-content/uploads/2017/12/amp-600x320.jpg" width="600" height="320" class="vcex-blog-entry-img" alt="Customer Premise Media Framework" data-no-retina=""></a></div><div class="vcex-blog-entry-details entry-details wpex-clr vc_custom_1512533453334"><h2 class="vcex-blog-entry-title entry-title"><a href="p-192.html" title="Customer Premise Media Framework">Customer Premise Media Framework</a></h2><div class="vcex-blog-entry-excerpt entry-excerpt entry clr"><p>Viosoft Corporation announced immediate availability of the Media Framework for Android, enabling companies to develop and deploy Digital…</p></div></div></div></div><div class="vcex-blog-entry entry-has-details span_1_of_3 col-2 col post-188 entry type-post has-media cat-26"><div class="vcex-blog-entry-inner entry-inner wpex-clr"><div class="vcex-blog-entry-media entry-media wpex-image-hover opacity"><a href="p-188.html" title="Digital Multimedia Reference Designs"><img src="assets/www.viosoft.com/wp-content/uploads/2017/12/sigma.jpg" width="263" height="191" class="vcex-blog-entry-img" alt="Digital Multimedia Reference Designs" data-at2x="https://www.viosoft.com/wp-content/uploads/2017/12/sigma.jpg"></a></div><div class="vcex-blog-entry-details entry-details wpex-clr vc_custom_1512533453334"><h2 class="vcex-blog-entry-title entry-title"><a href="p-188.html" title="Digital Multimedia Reference Designs">Digital Multimedia Reference Designs</a></h2><div class="vcex-blog-entry-excerpt entry-excerpt entry clr"><p>Viosoft Corporation announced availability of the Android Adoption Kit for MIPS-Based digital multimedia designs, continuing the push of…</p></div></div></div></div><div class="vcex-blog-entry entry-has-details span_1_of_3 col-3 col post-180 entry type-post has-media cat-26"><div class="vcex-blog-entry-inner entry-inner wpex-clr"><div class="vcex-blog-entry-media entry-media wpex-image-hover opacity"><a href="p-180.html" title="Wireless Remote Monitoring and Debug"><img src="assets/www.viosoft.com/wp-content/uploads/2017/12/g-series-600x320.jpg" width="600" height="320" class="vcex-blog-entry-img" alt="Wireless Remote Monitoring And Debug" data-no-retina=""></a></div><div class="vcex-blog-entry-details entry-details wpex-clr vc_custom_1512533453334"><h2 class="vcex-blog-entry-title entry-title"><a href="p-180.html" title="Wireless Remote Monitoring and Debug">Wireless Remote Monitoring and Debug</a></h2><div class="vcex-blog-entry-excerpt entry-excerpt entry clr"><p>Viosoft Corporation, a pioneer of fully integrated embedded software solutions, announces the availability of the next generation of…</p></div></div></div></div><div class="vcex-blog-entry entry-has-details span_1_of_3 col-1 col post-177 entry type-post has-media cat-26"><div class="vcex-blog-entry-inner entry-inner wpex-clr"><div class="vcex-blog-entry-media entry-media wpex-image-hover opacity"><a href="p-177.html" title="Enabling Multicore Development and Debug"><img src="assets/www.viosoft.com/wp-content/uploads/2017/12/source-code-600x320.jpg" width="600" height="320" class="vcex-blog-entry-img" alt="Enabling Multicore Development And Debug" data-no-retina=""></a></div><div class="vcex-blog-entry-details entry-details wpex-clr vc_custom_1512533453334"><h2 class="vcex-blog-entry-title entry-title"><a href="p-177.html" title="Enabling Multicore Development and Debug">Enabling Multicore Development and Debug</a></h2><div class="vcex-blog-entry-excerpt entry-excerpt entry clr"><p>Viosoft Corporation, a pioneer of fully integrated embedded software solutions, announces the availability of the Arriba for Android…</p></div></div></div></div><div class="vcex-blog-entry entry-has-details span_1_of_3 col-2 col post-170 entry type-post has-media cat-26"><div class="vcex-blog-entry-inner entry-inner wpex-clr"><div class="vcex-blog-entry-media entry-media wpex-image-hover opacity"><a href="p-170.html" title="Best in Show at ESC"><img src="assets/www.viosoft.com/wp-content/uploads/2017/12/best-in-show-1-600x320.jpg" width="600" height="320" class="vcex-blog-entry-img" alt="Best In Show At ESC" data-no-retina=""></a></div><div class="vcex-blog-entry-details entry-details wpex-clr vc_custom_1512533453334"><h2 class="vcex-blog-entry-title entry-title"><a href="p-170.html" title="Best in Show at ESC">Best in Show at ESC</a></h2><div class="vcex-blog-entry-excerpt entry-excerpt entry clr"><p>VDC Research, the market intelligence and strategy consulting firm for the embedded community, announced the winner of the…</p></div></div></div></div><div class="vcex-blog-entry entry-has-details span_1_of_3 col-3 col post-157 entry type-post has-media cat-26"><div class="vcex-blog-entry-inner entry-inner wpex-clr"><div class="vcex-blog-entry-media entry-media wpex-image-hover opacity"><a href="p-157.html" title="Symplifying Android DevOps"><img src="assets/www.viosoft.com/wp-content/uploads/2017/12/viosoft_arriba_android_debugging_eclipse-600x320.png" width="600" height="320" class="vcex-blog-entry-img" alt="Symplifying Android DevOps" data-no-retina=""></a></div><div class="vcex-blog-entry-details entry-details wpex-clr vc_custom_1512533453334"><h2 class="vcex-blog-entry-title entry-title"><a href="p-157.html" title="Symplifying Android DevOps">Symplifying Android DevOps</a></h2><div class="vcex-blog-entry-excerpt entry-excerpt entry clr"><p>MIPS Technologies, Inc. (Nasdaq: MIPS), a leading provider of industry-standard processor architectures and cores for home entertainment, communications,…</p></div></div></div></div></div></div></div></div></div></div><div data-vc-full-width="true" data-vc-full-width-init="true" class="vc_row wpb_row vc_row-fluid vc_custom_1512603035045 wpex-vc_row-has-fill wpex-vc-row-stretched" style="position: relative; left: -155px; box-sizing: border-box; width: 1440px; padding-left: 155px; padding-right: 155px;"><div class="wpb_column vc_column_container vc_col-sm-12"><div style="margin-bottom: 0;" class="vc_column-inner "><div class="wpb_wrapper">
+	<div class="wpb_text_column wpb_content_element ">
+		<div class="wpb_wrapper">
+			<p style="text-align: center;"><span style="font-size: 24px; font-family: Lato;">For more information about Viosoft products, services and solutions</span></p>
+
+		</div>
+	</div>
+<div class="vcex-spacing" style="height:40px"></div><div class="textcenter theme-button-wrap clr"><a href="page_id-63.html" title="Contact Us" class="vcex-button theme-button flat black align-center inline hvr hvr-float-shadow wpex-data-hover wpex-data-hover-0" target="_blank" style="padding:15px 25px;font-size:14px;font-weight:400;letter-spacing:2px;text-transform:uppercase;" rel="nofollow" data-hover-background="#c5a47e"><span class="theme-button-inner">Contact Us</span></a></div> <div class="vc_empty_space" style="height: 32px"><span class="vc_empty_space_inner"></span></div>
+</div></div></div></div><div class="vc_row-full-width vc_clearfix"></div>
+</div>
+
+
+</article><!-- #single-blocks -->
+				
+				
+			</div><!-- #content -->
+
+			
+		</div><!-- #primary -->
+
+		
+	</div><!-- .container -->
+
+
+            
+        </main><!-- #main-content -->
+                
+        
+        
+
+<div class="clr footer-reveal">
+
+
+
+<div id="footer-bottom" class="clr">
+	<div id="footer-bottom-inner" class="container clr">
+		
+<div id="copyright" class="clr">
+	<div class="textcenter">
+© Copyright - Viosoft Corporation - All Rights Reserved 2026
+</div></div><!-- #copyright -->	</div><!-- #footer-bottom-inner -->
+</div><!-- #footer-bottom -->
+
+
+</div><!-- .footer-reveal -->
+    </div><!-- #wrap -->
+
+    
+</div><!-- .outer-wrap -->
+
+
+
+<div id="mobile-menu-search" class="clr wpex-hidden">
+	<form method="get" action="index.html" class="mobile-menu-searchform">
+		<input type="search" name="s" autocomplete="off" placeholder="Search">
+				<button type="submit" class="searchform-submit"><span class="fa fa-search"></span></button>
+	</form>
+</div><!-- #mobile-menu-search -->
+<a href="#outer-wrap" id="site-scroll-top" class=""><span class="fa fa-chevron-up" aria-hidden="true"></span><span class="screen-reader-text">Back To Top</span></a>			<div id="sidr-close"><a href="#sidr-close" class="toggle-sidr-close" aria-hidden="true"></a></div>
+				<script type="text/javascript">
+				function revslider_showDoubleJqueryError(sliderID) {
+					var errorMessage = "Revolution Slider Error: You have some jquery.js library include that comes after the revolution files js include.";
+					errorMessage += "<br> This includes make eliminates the revolution slider libraries, and make it not work.";
+					errorMessage += "<br><br> To fix it you can:<br>&nbsp;&nbsp;&nbsp; 1. In the Slider Settings -> Troubleshooting set option:  <strong><b>Put JS Includes To Body</b></strong> option to true.";
+					errorMessage += "<br>&nbsp;&nbsp;&nbsp; 2. Find the double jquery.js include and remove it.";
+					errorMessage = "<span style='font-size:16px;color:#BC0C06;'>" + errorMessage + "</span>";
+						jQuery(sliderID).show().html(errorMessage);
+				}
+			</script>
+			<link rel="stylesheet" id="vc_linecons-css" href="assets/www.viosoft.com/wp-content/plugins/js_composer/assets/css/lib/vc-linecons/vc_linecons_icons.min_de546528.css" type="text/css" media="all">
+<link rel="stylesheet" id="wpex-hover-animations-css" href="assets/www.viosoft.com/wp-content/themes/Total/assets/lib/hover-css/hover-css.min_74064135.css" type="text/css" media="all">
+<script type="text/javascript" id="wpex-core-js-extra">
+/* <![CDATA[ */
+var wpexLocalize = {"isRTL":"","mainLayout":"full-width","menuSearchStyle":"header_replace","siteHeaderStyle":"one","megaMenuJS":"1","superfishDelay":"600","superfishSpeed":"fast","superfishSpeedOut":"fast","hasMobileMenu":"1","mobileMenuBreakpoint":"960","mobileMenuStyle":"sidr","mobileMenuToggleStyle":"icon_buttons","localScrollUpdateHash":"","localScrollHighlight":"1","localScrollSpeed":"1000","localScrollEasing":"easeInOutExpo","scrollTopSpeed":"1000","scrollTopOffset":"100","carouselSpeed":"150","lightboxType":"iLightbox","customSelects":".woocommerce-ordering .orderby, #dropdown_product_cat, .widget_categories select, .widget_archive select, #bbp_stick_topic_select, #bbp_topic_status_select, #bbp_destination_topic, .single-product .variations_form .variations select, .widget .dropdown_product_cat","overlaysMobileSupport":"1","responsiveDataBreakpoints":{"tl":"1024px","tp":"959px","pl":"767px","pp":"479px"},"ajaxurl":"https:\/\/www.viosoft.com\/wp-admin\/admin-ajax.php","loadMore":{"text":"Load More","loadingText":"Loading...","failedText":"Failed to load posts."},"sidrSource":"#sidr-close, #site-navigation, #mobile-menu-search","sidrDisplace":"","sidrSide":"right","sidrBodyNoScroll":"","sidrSpeed":"300","sidrDropdownTarget":"arrow","altercf7Prealoader":"1","iLightbox":{"auto":false,"skin":"minimal","path":"horizontal","infinite":false,"maxScale":1,"minScale":0,"width":1400,"height":"","videoWidth":1280,"videoHeight":720,"controls":{"arrows":true,"thumbnail":true,"fullscreen":true,"mousewheel":false,"slideshow":true},"slideshow":{"pauseTime":3000,"startPaused":true},"effects":{"reposition":true,"repositionSpeed":200,"switchSpeed":300,"loadedFadeSpeed":50,"fadeSpeed":500},"show":{"title":true,"speed":200},"hide":{"speed":200},"overlay":{"blur":true,"opacity":"0.9"},"social":{"start":true,"show":"mouseenter","hide":"mouseleave","buttons":false},"text":{"close":"Press Esc to close","enterFullscreen":"Enter Fullscreen (Shift+Enter)","exitFullscreen":"Exit Fullscreen (Shift+Enter)","slideShow":"Slideshow","next":"Next","previous":"Previous"},"thumbnails":{"maxWidth":120,"maxHeight":80}}};
+/* ]]> */
+</script>
+<script type="text/javascript" src="assets/www.viosoft.com/wp-content/themes/Total/assets/js/wpex.min_a94ece27.js" id="wpex-core-js"></script>
+<script type="text/javascript" id="wpex-retina-js-extra">
+/* <![CDATA[ */
+var wpexRetina = {"mode":"2"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="assets/www.viosoft.com/wp-content/themes/Total/assets/js/dynamic/retina_2fb2d5e2.js" id="wpex-retina-js"></script>
+<script type="text/javascript" src="assets/www.viosoft.com/wp-includes/js/wp-embed.min_24b2172d.js" id="wp-embed-js"></script>
+<script type="text/javascript" src="assets/www.viosoft.com/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min_de546528.js" id="wpb_composer_front_js-js"></script>
+
+
+
+<div class="wpex-sidr-overlay wpex-hidden"></div><div id="sidr-main" class="sidr right" style="transition: right 0.3s;"><div class="sidr-inner"><a href="#sidr-close" class="sidr-class-toggle-sidr-close" aria-hidden="true"></a></div><div class="sidr-inner">
+
+			
+				<ul id="sidr-id-menu-main" class="sidr-class-dropdown-menu sidr-class-sf-menu sidr-class-sf-js-enabled"><li id="sidr-id-menu-item-128" class="sidr-class-menu-item sidr-class-menu-item-type-post_type sidr-class-menu-item-object-page sidr-class-menu-item-home sidr-class-current-menu-item sidr-class-page_item sidr-class-page-item-43 sidr-class-current_page_item sidr-class-menu-item-128"><a href="index.html" aria-current="page"><span class="sidr-class-link-inner">Home</span></a></li>
+<li id="sidr-id-menu-item-117" class="sidr-class-menu-item sidr-class-menu-item-type-post_type sidr-class-menu-item-object-page sidr-class-menu-item-117"><a href="page_id-40.html"><span class="sidr-class-link-inner">Portfolio</span></a></li>
+<li id="sidr-id-menu-item-119" class="sidr-class-menu-item sidr-class-menu-item-type-post_type sidr-class-menu-item-object-page sidr-class-menu-item-119"><a href="page_id-62.html"><span class="sidr-class-link-inner">Services</span></a></li>
+<li id="sidr-id-menu-item-118" class="sidr-class-menu-item sidr-class-menu-item-type-post_type sidr-class-menu-item-object-page sidr-class-menu-item-118"><a href="page_id-63.html"><span class="sidr-class-link-inner">Contact</span></a></li>
+<li class="sidr-class-search-toggle-li sidr-class-wpex-menu-extra"><a href="#" class="sidr-class-site-search-toggle sidr-class-search-header-replace-toggle"><span class="sidr-class-link-inner"><span class="sidr-class-wpex-menu-search-text">Search</span><span class="fa fa-search" aria-hidden="true"></span></span></a></li></ul>
+			
+		</div><div class="sidr-inner">
+	<form method="get" action="index.html" class="sidr-class-mobile-menu-searchform">
+		<input type="search" name="s" autocomplete="off" placeholder="Search">
+				<button type="submit" class="sidr-class-searchform-submit"><span class="fa fa-search"></span></button>
+	</form>
+</div></div><script>/* __RUNTIME_DOMAIN_REWRITER__ */
+(function(){
+  var ORIG = ['www.viosoft.com', 'viosoft.com'];
+  var cur  = window.location.host; // e.g. "localhost:8080" or "demo.io"
+  if (!cur || ORIG.indexOf(cur) !== -1) return; // already correct host
+
+  function rewriteNode(node) {
+    ['href','src','action','data-src','data-href'].forEach(function(attr) {
+      var v = node.getAttribute && node.getAttribute(attr);
+      if (!v) return;
+      var changed = v;
+      ORIG.forEach(function(o) {
+        changed = changed.split('://' + o).join('://' + cur);
+      });
+      if (changed !== v) node.setAttribute(attr, changed);
+    });
+  }
+
+  // Rewrite existing DOM
+  document.querySelectorAll('[href],[src],[action],[data-src],[data-href]')
+    .forEach(rewriteNode);
+
+  // Watch for dynamically added elements
+  if (window.MutationObserver) {
+    new MutationObserver(function(muts) {
+      muts.forEach(function(m) {
+        m.addedNodes.forEach(function(n) {
+          if (n.querySelectorAll) {
+            n.querySelectorAll('[href],[src],[action]').forEach(rewriteNode);
+            rewriteNode(n);
+          }
+        });
+      });
+    }).observe(document.documentElement, {childList:true, subtree:true});
+  }
+})();
+</script>
+</body></html>
